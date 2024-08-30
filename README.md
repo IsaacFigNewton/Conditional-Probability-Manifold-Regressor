@@ -37,7 +37,8 @@
 <p>This ensures a standard "resolution" of the algorithm in every dimension but gives a maximum of <strong>k * m</strong> neighbors to consider for estimating the value of <strong>x</strong> and a minimum of <strong>k</strong> neighbors for consideration</p>
 
 <h3>Get weighted average of all neighbors' likelihoods</h3>
-
+    <li>Calculate the weighted mean of the probabilities using inverse-distance kernel weighting</li>
+</ul>
 
 <br>
 <br>
