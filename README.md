@@ -37,7 +37,6 @@
 <p>This ensures a standard "resolution" of the algorithm in every dimension but gives a maximum of <strong>k * m</strong> neighbors to consider for estimating the value of <strong>x</strong> and a minimum of <strong>k</strong> neighbors for consideration</p>
 
 <h3>Get weighted average of all neighbors' likelihoods</h3>
-<ul>
     <li>Calculate the weighted mean of the probabilities using inverse-distance kernel weighting</li>
 </ul>
 
@@ -47,5 +46,6 @@
 <h2>For the future</h2>
 <ul>
     <li>Recursively perform this process on the lth neighbors-of-neighbors of the original, unknown seed datapoint</li>
-    <li>Add additional weighting based on variability in class attributable to each feature</li>
+    <li>Calculate the weighted mean of the probabilities using inverse-distance kernel weighting</li>
+    <li>Also, maybe add additional weighting based on variability in class attributable to each feature</li>
 </ul>
