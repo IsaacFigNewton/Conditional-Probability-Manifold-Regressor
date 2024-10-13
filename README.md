@@ -19,6 +19,7 @@
 </ul>
 
 <br>
+<hr>
 <br>
 
 <h2>Steps:</h2>
@@ -39,78 +40,72 @@
 </ul>
 
 <br>
+<hr>
 <br>
 
 <h2>Features to Implement</h2>
-    <ul>
-        <li>
-            <strong>Implement hyperparameters:</strong>
-            <ul>
-                <li><strong>branching_depth:</strong>
-                    <ul>
-                        <li>Define how many times to recursively expand bins on neighboring points.</li>
-                    </ul>
-                </li>
-                <li><strong>n_neighbors:</strong>
-                    <ul>
-                        <li>Set the number of neighboring points to include for bin expansion at each step.</li>
-                        <li>Ensure a standard "resolution" of the algorithm in each dimension.</li>
-                        <li>If there are fewer than n_neighbors available to a point (which can only be the case if n_neighbors is greater than the sample), throw an error.</li>
-                    </ul>
-                </li>
-                <li><strong>training_fidelity:</strong>
-                    <ul>
-                        <li>Define the maximum number of neighbors or bin expansions for training data points.</li>
-                        <li>Ensure it's only applied if branching_depth > 0 and n_neighbors > 0.</li>
-                    </ul>
-                </li>
-                <li><strong>test_fidelity:</strong>
-                    <ul>
-                        <li>Define the maximum number of neighbors or bin expansions for testing data points.</li>
-                    </ul>
-                </li>
-            </ul>
-        </li>
-        <li>
-            <strong>Binning of training data:</strong>
-            <ul>
-                <li> Binning Process:
-                    <ul>
-                        <li>Define the binning process for creating discretized bins of increasing sizes around a point.</li>
-                        <li>Get the mean class probabilities for each bin.</li>
-                        <li>
-                            <strong>Increment bin width in all features/dimensions simultaneously:</strong>
-                            <ul>
-                                <li>Identify the overall nearest neighbor in each dimension using Euclidean distance.</li>
-                                <li>Increment bin width in all dimensions based on the distance to this nearest neighbor.</li>
-                                <li>Repeat this for multiple bin expansions.</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li> Variance Collection:
-                    <ul>
-                        <li>Calculate the variance matrix for each bin based on points within the bin.</li>
-                        <li>Calculate t or z values based on the sample size of points in the bin.</li>
-                        <li>Apply inverse weighting based on these variance matrices and t/z values.</li>
-                        <li>Weigh incrementally larger discretized bins inversely proportional to their individual variance matrices and t or z values</li>
-                    </ul>
-                </li>
-                <li>
-                    <strong>Bins as inputs to a Kalman filter:</strong>
-                    <ul>
-                        <li>Implement Kalman filtering to process input from different sized bins.</li>
-                        <li>Ensure compatibility between varying bin sizes and the Kalman filter input.</li>
-                        <li>Note that as the bin width increases, the precision decreases but the accuracy increases.</li>
-                    </ul>
-                </li>
-            </ul>
-        </li>
-        <li>
-            <strong>Binning of test data:</strong>
-            <ul>
-                <li>Replace KNN with the binning method above, but for test data points as well.</li>
-                <li>Implement binning around the test point itself, using the modified conditional probabilities found for the training points.</li>
-            </ul>
-        </li>
-    </ul>
+<h3>Implement hyperparameters:</h3>
+<ul>
+    <li><strong>branching_depth:</strong>
+        <ul>
+            <li>Define how many times to recursively expand bins on neighboring points.</li>
+        </ul>
+    </li>
+    <li><strong>n_neighbors:</strong>
+        <ul>
+            <li>Set the number of neighboring points to include for bin expansion at each step.</li>
+            <li>Ensure a standard "resolution" of the algorithm in each dimension.</li>
+            <li>If there are fewer than n_neighbors available to a point (which can only be the case if n_neighbors is greater than the sample), throw an error.</li>
+        </ul>
+    </li>
+    <li><strong>training_fidelity:</strong>
+        <ul>
+            <li>Define the maximum number of neighbors or bin expansions for training data points.</li>
+            <li>Ensure it's only applied if branching_depth > 0 and n_neighbors > 0.</li>
+        </ul>
+    </li>
+    <li><strong>test_fidelity:</strong>
+        <ul>
+            <li>Define the maximum number of neighbors or bin expansions for testing data points.</li>
+        </ul>
+    </li>
+</ul>
+
+<h3>Binning of training data:</h3>
+<ul>
+    <li> <h4>Binning Process:</h4>
+        <ul>
+            <li>Define the binning process for creating discretized bins of increasing sizes around a point.</li>
+            <li>Get the mean class probabilities for each bin.</li>
+            <li>
+                <strong>Increment bin width in all features/dimensions simultaneously:</strong>
+                <ul>
+                    <li>Identify the overall nearest neighbor in each dimension using Euclidean distance.</li>
+                    <li>Increment bin width in all dimensions based on the distance to this nearest neighbor.</li>
+                    <li>Repeat this for multiple bin expansions.</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li> <h4>Variance Collection:</h4>
+        <ul>
+            <li>Calculate the variance matrix for each bin based on points within the bin.</li>
+            <li>Calculate t or z values based on the sample size of points in the bin.</li>
+            <li>Apply inverse weighting based on these variance matrices and t/z values.</li>
+            <li>Weigh incrementally larger discretized bins inversely proportional to their individual variance matrices and t or z values</li>
+        </ul>
+    </li>
+    <li> <h4>Bins as inputs to a Kalman filter:</h4>
+        <ul>
+            <li>Implement Kalman filtering to process input from different sized bins.</li>
+            <li>Ensure compatibility between varying bin sizes and the Kalman filter input.</li>
+            <li>Note that as the bin width increases, the precision decreases but the accuracy increases.</li>
+        </ul>
+    </li>
+</ul>
+
+<h3>Binning of test data:</h3>
+<ul>
+    <li>Replace KNN with the binning method above, but for test data points as well.</li>
+    <li>Implement binning around the test point itself, using the modified conditional probabilities found for the training points.</li>
+</ul>
