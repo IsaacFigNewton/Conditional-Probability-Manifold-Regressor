@@ -27,7 +27,7 @@
 <ul>
     <li>Calculate local PMF values for each <strong>a<sub>i</sub></strong> in <strong>A</strong> (so you don’t have to do it again later) by finding <strong>P(class | value of a<sub>i</sub> feature<sub>1</sub> ∧ value of a<sub>i</sub> feature<sub>2</sub> ∧ …)</strong> using Bayes’ Theorem.</li>
     <li>AKA: Get the probability of <strong>a<sub>i</sub></strong>’s value in <strong>f<sub>j</sub></strong>, denoted <strong>p<sub>ij</sub></strong></li>
-    <li>Find <img src="images/product of conditional probabilities" alt="product of conditional probabilities"></li>
+    <li>Find <img src="images/product-of-conditional-probabilities.png" alt="product of conditional probabilities"></li>
     <li>Multiply by <strong>P(class)</strong></li>
     <li>Repeat this process for all classes</li>
     <li>Basically apply Bayes’ Theorem to all the training data points for each class</li>
