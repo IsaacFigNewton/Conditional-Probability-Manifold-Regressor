@@ -12,9 +12,9 @@
     <li>The training datapoint count be represented with <strong>n</strong></li>
     <li>The feature count be represented with <strong>m</strong></li>
     <li>The class count be represented with <strong>l</strong></li>
-    <li>The training dataset be denoted <strong>A = {a<sub>0</sub>, a<sub>1</sub>, a<sub>2</sub>, … a<sub>i</sub>, …, a<sub>n</sub>}</strong></li>
-    <li>The dimensions of the feature space in which all <strong>a</strong> in <strong>A</strong> reside be denoted as <strong>D = {f<sub>0</sub>, f<sub>1</sub>, f<sub>2</sub>, … f<sub>j</sub>, …, f<sub>m</sub>}</strong></li>
-    <li>The classes be denoted with <strong>C = {c<sub>0</sub>, c<sub>1</sub>, c<sub>2</sub>, … c<sub>k</sub>, …, c<sub>l</sub>}</strong></li>
+    <li>The training dataset be denoted <strong>A = {a<sub>0</sub>, a<sub>1</sub>, a<sub>2</sub>, … a<sub>i</sub>, …, a<sub>n-1</sub>}</strong></li>
+    <li>The dimensions of the feature space in which all <strong>a</strong> in <strong>A</strong> reside be denoted as <strong>D = {f<sub>0</sub>, f<sub>1</sub>, f<sub>2</sub>, … f<sub>j</sub>, …, f<sub>m-1</sub>}</strong></li>
+    <li>The classes be denoted with <strong>C = {c<sub>0</sub>, c<sub>1</sub>, c<sub>2</sub>, … c<sub>k</sub>, …, c<sub>l-1</sub>}</strong></li>
     <li>A testing data point be denoted <strong>x</strong></li>
 </ul>
 
