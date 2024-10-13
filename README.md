@@ -1,4 +1,4 @@
-<h1>Probability Mass Function Regressor v1</h1>
+<h1>Conditional Probability Manifold Regressor v1</h1>
 <h2>Purpose</h2>
 <p>Represents the class probability distribution of a dataset using KNN on classes' conditional probabilities for locations in the feature space.</p>
 <p>Meant to generalize nonlinear relationships better than normal DT's or Gaussian NB alone.</p>
