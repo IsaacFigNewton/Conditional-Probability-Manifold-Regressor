@@ -109,3 +109,14 @@
     <li>Replace KNN with the binning method above, but for test data points as well.</li>
     <li>Implement binning around the test point itself, using the modified conditional probabilities found for the training points.</li>
 </ul>
+
+<br>
+<hr>
+<br>
+
+<h2>Future Ideas</h2>
+    <ul>
+        <li>Use statistics to detect interaction effects between features.</li>
+        <li>Model interaction effects as additional dimensions?</li>
+        <li>Parametrize nonparametric manifold estimation?</li>
+    </ul>
