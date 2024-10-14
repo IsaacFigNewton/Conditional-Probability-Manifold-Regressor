@@ -16,6 +16,7 @@
     <li>The dimensions of the feature space in which all <strong>a</strong> in <strong>A</strong> reside be denoted as <strong>D = {f<sub>0</sub>, f<sub>1</sub>, f<sub>2</sub>, … f<sub>j</sub>, …, f<sub>m-1</sub>}</strong></li>
     <li>The classes be denoted with <strong>C = {c<sub>0</sub>, c<sub>1</sub>, c<sub>2</sub>, … c<sub>k</sub>, …, c<sub>l-1</sub>}</strong></li>
     <li>A testing data point be denoted <strong>x</strong></li>
+    <li>Assume <strong>n_neighbors = n-1</strong></li>
 </ul>
 
 <br>
@@ -109,6 +110,41 @@
     <li>Replace KNN with the binning method above, but for test data points as well.</li>
     <li>Implement binning around the test point itself, using the modified conditional probabilities found for the training points.</li>
 </ul>
+
+<br>
+<hr>
+<br>
+
+<h2>Pseudocode:</h2>
+<div style="font-family: Arial, sans-serif; line-height: 1.6; margin: 20px;">
+<pre style="background-color: #f4f4f4; padding: 10px; border-radius: 5px; white-space: pre-wrap; word-wrap: break-word;">
+        <br>    
+        For each datapoint in the training dataset, <strong>a<sub>i</sub></strong>:
+            Let <strong>ClassBinCondProbs</strong> be a matrix of dimensions <strong>l x n<sub>neighbors</sub></strong>. 
+            For each <strong>z</strong> in range(0, <strong>n<sub>neighbors</sub></strong>):
+                Compose a set of points, denoted <strong>BinContents</strong>, containing <strong>a<sub>i</sub></strong> as well as its <strong>z</strong> nearest neighbors using a KD tree. 
+                Create a discrete ‘bin’, denoted as <strong>BinProperties</strong>, with the following properties: <strong>binWidths</strong> is an array of length <strong>m</strong>, <strong>binCenters</strong> is an array of length <strong>m</strong>, <strong>binMeans</strong> is an array of length <strong>m</strong>, and <strong>binCovarianceMatrix</strong> is a matrix of dimensions <strong>m x m</strong>.
+                <br>
+                Let the pair of points in <strong>BinContents</strong> that has the largest difference in dimension <strong>f<sub>j</sub></strong> be referred to as <strong>a<sub>ij-min</sub></strong> and <strong>a<sub>ij-max</sub></strong>. 
+                For each <strong>f<sub>j</sub></strong> in <strong>D</strong>:
+                    Let <strong>BinProperties.binWidths[f<sub>j</sub>]</strong> be determined by the difference between <strong>a<sub>ij-min</sub></strong> and <strong>a<sub>ij-max</sub></strong>’s values in <strong>f<sub>j</sub></strong>. 
+                    Let <strong>BinProperties.binCenters[f<sub>j</sub>]</strong> be determined with the average of <strong>a<sub>ij-min</sub></strong> and <strong>a<sub>ij-max</sub></strong>’s values in <strong>f<sub>j</sub></strong>. 
+                    Let <strong>BinProperties.binMeans[f<sub>j</sub>]</strong> be the mean of all points in <strong>BinContents</strong> in <strong>f<sub>j</sub></strong>. 
+                    Let <strong>BinProperties.binCovarianceMatrix</strong> be the covariance matrix for all points in <strong>BinContents</strong>, calculated using degrees of freedom correction.
+                <br>
+                For each class, <strong>c<sub>k</sub></strong>, in <strong>C</strong>:
+                    Let <strong>ClassBinCondProbs[c<sub>k</sub>][z]</strong> be the conditional probability for class <strong>c<sub>k</sub></strong>. 
+                    Calculate this using Bayes’ theorem, by multiplying the conditional probabilities that a random value falls within <strong>BinProperties.binWidths[f<sub>j</sub>]/2</strong> units of <strong>BinProperties.binCenters[f<sub>j</sub>]</strong> for all <strong>f<sub>j</sub></strong> in <strong>D</strong> and then dividing by the estimates of the priors.
+                <br>
+            Use Kalman filtering to combine the covariance matrices and mean class conditional probabilities for bins of all sizes at point <strong>a<sub>i</sub></strong>.
+            This should allow us to get a better estimate of the true conditional class probabilities at <strong>a<sub>i</sub></strong>, get a refined covariance matrix for <strong>a<sub>i</sub></strong>, and store these summary statistics in a new variable, called <strong>a<sub>i</sub>PopulationStatEstimates</strong>.
+            <br>
+            Append <strong>a<sub>i</sub>PopulationStatEstimates</strong> to a set of all the training datapoints’ statistics, at index <strong>i</strong> (like the subscript <strong>i</strong> of <strong>a<sub>i</sub></strong>).
+        <br>
+        For testing, consider an arbitrary point in the testing dataset, denoted with <strong>x</strong>: 
+        Apply the same binning process described above, but using the updated training data point likelihood estimates with more of a Gaussian Naive Bayes approach, as well as variances to get better estimates of the class likelihoods and variances at the test point.
+</pre>
+</div>
 
 <br>
 <hr>
