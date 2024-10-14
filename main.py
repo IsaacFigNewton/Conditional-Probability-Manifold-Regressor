@@ -22,7 +22,7 @@ from sklearn.metrics import precision_score, \
 from sklearn.model_selection import GridSearchCV
 
 from config import *
-from modules.PMFRegressor import PMFRegressor
+from modules.ManifoldRegressor import ManifoldRegressor
 from modules.util import *
 
 
@@ -103,7 +103,7 @@ def cv_other_models(X, y):
     cv_mlp(X, y, 'mlp classifier')
     cv_rf(X, y, 'rf classifier')
 
-def cv_pmf(X, y):
+def cv_custom_model(X, y):
     # Define the parameter grid
     param_grid = {
         'regressor__n_neighbors': range(1, 3),
@@ -119,7 +119,7 @@ def cv_pmf(X, y):
     }
 
     pipeline = Pipeline([
-        ("regressor", PMFRegressor())
+        ("regressor", ManifoldRegressor())
     ])
 
     # Create the GridSearchCV object
@@ -233,8 +233,8 @@ if __name__ == "__main__":
     # Cross-Validation  ************************************************************************************************
     # Cross-validate other models
     cv_other_models(transformed_X, transformed_y)
-    # Cross-validate the PMF classifier
-    grid_search, f1_by_k_bins = cv_pmf(transformed_X, transformed_y)
+    # Cross-validate the custom classifier
+    grid_search, f1_by_k_bins = cv_custom_model(transformed_X, transformed_y)
 
     # Get the best parameters and scores
     optimal_k = grid_search.best_params_['regressor__n_neighbors']
