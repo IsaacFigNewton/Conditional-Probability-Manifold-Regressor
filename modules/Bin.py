@@ -3,64 +3,59 @@ from sklearn.covariance import LedoitWolf
 import numpy as np
 
 class Bin:
-    def __init__(self, X, y, classes):
+    def __init__(self, all_X, X, y, classes):
+        self.contents = dict()
         self.X = X
         self.y = y
         self.classes_ = classes
 
-        #   class likelihoods
-        self.class_likelihoods = None
-        #   class likelihood variances
-        self.class_likelihood_variances = None
-        #   bin width in each feature dimension
-        self.bin_widths = None
-        #   bin center in each feature dimension
-        self.bin_centers = None
-        #   mean binned point value in every feature dimension
-        self.bin_means = None
-        #   covariance matrix of binned points
-        self.bin_covariance_matrix = None
-
-    # get the properties associated with the current bin
-    # includes conditional probabilities for all classes, but, again, for only 1 bin
-    # TODO: IMPLEMENT
-    def calculate_bin_properties(self):
         feature_count = self.X.shape[1]
-        # Calculate binWidths, binCenters, binMeans, and binCovarianceMatrix
-        self.bin_widths = np.zeros(feature_count)
-        self.bin_centers = np.zeros(feature_count)
-        self.bin_means = np.zeros(feature_count)
+        #   class likelihoods
+        self.class_likelihoods = np.zeros(len(self.classes_))
+        #   class likelihood variances
+        self.class_likelihood_variances = np.zeros(len(self.classes_))
+        #   bin width in each feature dimension
+        self.widths = np.zeros(feature_count)
+        #   bin center in each feature dimension
+        self.centers = np.zeros(feature_count)
+        #   mean binned point value in every feature dimension
+        self.means = np.zeros(feature_count)
+
+        # Covariance matrix of binned points using LedoitWolf for shrinkage and stability
+        lw = LedoitWolf().fit(self.X)
+        self.covariance_matrix = lw.covariance_
 
         for j in range(feature_count):
-            feature_values = self.bin_contents[:, j]
-            self.bin_widths[j] = np.max(feature_values) - np.min(feature_values)
-            self.bin_centers[j] = np.mean([np.max(feature_values), np.min(feature_values)])
-            self.bin_means[j] = np.mean(feature_values)
+            # get the values of all the points in a certain feature dimension
+            feature_values = self.X[:, j]
+            self.widths[j] = np.max(feature_values) - np.min(feature_values)
+            self.centers[j] = np.mean([np.max(feature_values), np.min(feature_values)])
+            self.means[j] = np.mean(feature_values)
 
-        # Covariance matrix using LedoitWolf for shrinkage and stability
-        lw = LedoitWolf().fit(self.bin_contents)
-        self.bin_covariance_matrix = lw.covariance_
+            # get the indices of all points in the dataset that lie within the bin's bounds
+            min_bin_value = self.centers[j] - self.widths[j] / 2
+            max_bin_value = self.centers[j] + self.widths[j] / 2
+            self.get_contents(j, all_X, min_bin_value, max_bin_value)
+        
+    def get_contents(self, feature_idx, all_X, min_bin_value, max_bin_value):
+        # filter all_x down to the entries such that min_bin_value <= all_X[:, feature_idx] <= max_bin_value
+        mask = (all_X[:, feature_idx] >= min_bin_value) & (all_X[:, feature_idx] <= max_bin_value)
 
-    def calculate_class_cond_probs(self):
-        class_cond_probs = np.zeros(len(self.classes_))
+        # Apply the mask to filter rows and extract just the entries' indices
+        self.contents[feature_idx] = np.where(mask)[0]
 
-        for class_idx in range(len(self.classes_)):
-            prob_product = 1
-            for j in range(self.bin_widths.shape[0]):
-                bin_width = self.bin_widths[j] / 2
-                bin_center = self.bin_centers[j]
-                prob = multivariate_normal.pdf(bin_center, mean=self.bin_means[j],
-                                               cov=self.bin_covariance_matrix[j, j])
-                prob *= bin_width
-                prob_product *= prob
 
-            class_cond_probs[class_idx] = prob_product / self.priors[self.classes[class_idx]]
-
-        return class_cond_probs
-
-#TODO: IMPLEMENT
-# bins_list of type tf.Variable(tf.zeros((n_neighbors, X.shape[0], len(self.classes_)), dtype=tf.float32))
-def kalman_filter_combination(bins_list):
+#TODO: IMPLEMENT THIS CORRECTLY
+# bins indexed as [sample_size, data_point_index, likelihood (0) or likelihood_variance (1), class]
+def merge_bin_stats(bins, classes):
+    combined_class_likelihoods = np.zeros(classes)
+    combined_class_likelihood_variances = np.zeros(classes)
     # Combining covariance matrices and means using a Kalman-like filter
+    for bin_obj in bins:
+        combined_class_likelihoods += bin_obj.class_likelihoods
+        combined_class_likelihood_variances += bin_obj.class_likelihood_variances
+
+    combined_class_likelihoods /= len(bins)
+    combined_class_likelihood_variances /= len(bins)
 
     return combined_class_likelihoods, combined_class_likelihood_variances
