@@ -158,5 +158,5 @@
 
 <h2>Sauces</h2>
     <ul>
-        <li>[Precision weighting approach to likelihood estimation](https://en.wikipedia.org/wiki/Inverse-variance_weighting)</li>
+        <li><a href="https://en.wikipedia.org/wiki/Inverse-variance_weighting">Precision weighting approach to likelihood estimation</a></li>
     </ul>
