@@ -155,3 +155,8 @@
         <li>Model interaction effects as additional dimensions?</li>
         <li>Parametrize nonparametric manifold estimation?</li>
     </ul>
+
+<h2>Sauces</h2>
+    <ul>
+        <li>[Precision weighting approach to likelihood estimation](https://en.wikipedia.org/wiki/Inverse-variance_weighting)</li>
+    </ul>
