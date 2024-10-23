@@ -96,10 +96,9 @@
             <li>Weigh incrementally larger discretized bins inversely proportional to their individual variance matrices and t or z values</li>
         </ul>
     </li>
-    <li> <h4>Bins as inputs to a Kalman filter:</h4>
+    <li> <h4>Weighted averaging of the bins:</h4>
         <ul>
-            <li>Implement Kalman filtering to process input from different sized bins.</li>
-            <li>Ensure compatibility between varying bin sizes and the Kalman filter input.</li>
+            <li>Implement inverse-variance-weighted averaging to get better estimate from different sized bins.</li>
             <li>Note that as the bin width increases, the precision decreases but the accuracy increases.</li>
         </ul>
     </li>
@@ -136,7 +135,7 @@
                     Let <strong>ClassBinCondProbs[c<sub>k</sub>][z]</strong> be the conditional probability for class <strong>c<sub>k</sub></strong>. 
                     Calculate this using Bayes’ theorem, by multiplying the conditional probabilities that a random value falls within <strong>BinProperties.binWidths[f<sub>j</sub>]/2</strong> units of <strong>BinProperties.binCenters[f<sub>j</sub>]</strong> for all <strong>f<sub>j</sub></strong> in <strong>D</strong> and then dividing by the estimates of the priors.
                 <br>
-            Use Kalman filtering to combine the covariance matrices and mean class conditional probabilities for bins of all sizes at point <strong>a<sub>i</sub></strong>.
+            Use inverse-variance weighted averaging to combine the covariance matrices and mean class conditional probabilities for bins of all sizes at point <strong>a<sub>i</sub></strong>.
             This should allow us to get a better estimate of the true conditional class probabilities at <strong>a<sub>i</sub></strong>, get a refined covariance matrix for <strong>a<sub>i</sub></strong>, and store these summary statistics in a new variable, called <strong>a<sub>i</sub>PopulationStatEstimates</strong>.
             <br>
             Append <strong>a<sub>i</sub>PopulationStatEstimates</strong> to a set of all the training datapoints’ statistics, at index <strong>i</strong> (like the subscript <strong>i</strong> of <strong>a<sub>i</sub></strong>).

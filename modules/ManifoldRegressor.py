@@ -92,14 +92,13 @@ class ManifoldRegressor(ClassifierMixin, BaseEstimator):
                 # Calculate class conditional probabilities for each class
                 class_bin_cond_probs[sample_size, i, 0] = bin_obj.class_likelihoods
 
-            # Combine statistics using Kalman filter and store
-            #TODO: IMPLEMENT THIS
-            combined_class_probs, combined_class_prob_variances = merge_bin_stats(class_bin_cond_probs,
+            # Combine statistics using precision-weighted mean likelihood and store
+            combined_class_likelihoods, combined_class_likelihood_variances = merge_bin_stats(bins_list,
                                                                                   self.classes_)
-            # the aggregated likelihoods of each class
-            aggregated_class_likelihoods.append(combined_class_probs)
-            # the aggregated covariance matrices of each class
-            aggregated_class_likelihood_variances.append(combined_class_prob_variances)
+            # the aggregated class likelihoods
+            aggregated_class_likelihoods.append(combined_class_likelihoods)
+            # the aggregated class likelihood variances
+            aggregated_class_likelihood_variances.append(combined_class_likelihood_variances)
 
         return aggregated_class_likelihoods, aggregated_class_likelihood_variances
 
@@ -127,9 +126,12 @@ class ManifoldRegressor(ClassifierMixin, BaseEstimator):
                     # get the probability that a point in the bin is of a given class_idx
                     cond_prob *= points_in_bin_and_class.shape[0] / points_in_bin.shape[0]
 
+            # finish the naive bayes calculation for the class's conditional probability
+            #   given that a point lies in this bin
             bin.class_likelihoods[class_idx] = cond_prob / self.priors[self.classes_[class_idx]]
 
             #TODO: CALCULATE class_likelihood_variances
+            # find some way to combine the variances in the diagonal of the bin's covariance matrix
             bin.class_likelihood_variances = bin.class_likelihoods[class_idx]/2
 
         return bin
