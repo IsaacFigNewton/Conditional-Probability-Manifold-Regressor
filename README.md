@@ -1,5 +1,8 @@
 # Probability Mass Function Regressor v1  
 
+## Overview
+This currently only works for k=1, but I plan to implement a more robust approach this summer, so you can actually do different granularities.
+
 ## Goals  
 - Estimate the class probability distribution of a dataset using KNN at various granularities (similar to a Kernel Density Estimator)
 - Generalize nonlinear relationships better than standard decision trees or Gaussian Naïve Bayes while retaining a similar level of interpretability.  
