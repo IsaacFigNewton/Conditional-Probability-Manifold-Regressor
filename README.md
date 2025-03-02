@@ -1,50 +1,47 @@
-<h1>Probability Mass Function Regressor v1</h1>
-<h2>Purpose</h2>
-<p>Represents the class probability distribution of a dataset using KNN on classes' conditional probabilities for locations in the feature space.</p>
-<p>Meant to generalize nonlinear relationships better than normal DT's or Gaussian NB alone.</p>
+# Probability Mass Function Regressor v1  
 
-<br>
-<br>
+## Goals  
+- Estimate the class probability distribution of a dataset using KNN at various granularities (similar to a Kernel Density Estimator)
+- Generalize nonlinear relationships better than standard decision trees or Gaussian Naïve Bayes while retaining a similar level of interpretability.  
 
-<h2>Definitions</h2>
-<p><strong>Let:</strong></p>
-<ul>
-    <li>The training datapoint count be represented with <strong>n</strong></li>
-    <li>The feature count be represented with <strong>m</strong></li>
-    <li>The class count be represented with <strong>l</strong></li>
-    <li>The training dataset be denoted <strong>A = {a<sub>0</sub>, a<sub>1</sub>, a<sub>2</sub>, … a<sub>i</sub>, …, a<sub>n</sub>}</strong></li>
-    <li>The dimensions of the feature space in which all <strong>a</strong> in <strong>A</strong> reside be denoted as <strong>D = {f<sub>0</sub>, f<sub>1</sub>, f<sub>2</sub>, … f<sub>j</sub>, …, f<sub>m</sub>}</strong></li>
-    <li>The classes be denoted with <strong>C = {c<sub>0</sub>, c<sub>1</sub>, c<sub>2</sub>, … c<sub>k</sub>, …, c<sub>l</sub>}</strong></li>
-    <li>A testing data point be denoted <strong>x</strong></li>
-</ul>
+## Definitions  
+**Let:**  
+- The training datapoint count be represented as $n$.  
+- The feature count be represented as $m$.  
+- The class count be represented as $l$.  
+- The training dataset be denoted as:  
+  $$  A = \{ a_0, a_1, a_2, \dots, a_i, \dots, a_n \} $$
+- The dimensions of the feature space in which all $a$ in $A$ reside be denoted as:  
+  $$  D = \{ f_0, f_1, f_2, \dots, f_j, \dots, f_m \} $$
+- The set of classes be denoted as:  
+  $$  C = \{ c_0, c_1, c_2, \dots, c_k, \dots, c_l \} $$
+- A testing data point be denoted as $x$.
 
-<br>
-<br>
+## Steps  
 
-<h2>Steps:</h2>
+### Fitting  
+- Calculate local PMF values for each $a_i$ in $A$ (to avoid redundant computation later) by finding:  
+  $$
+  P(\text{class} \mid \text{value of } a_i f_1 \land \text{value of } a_i f_2 \land \dots)
+  $$
+  using Bayes’ Theorem.  
+- In other words, compute the probability of $a_i$’s value in $f_j$, denoted as $p_{ij}$.  
+- Find  
+  $$
+  i, j = 0 \dots n, m \quad \Rightarrow \quad p_{ij}
+  $$
+- Multiply by $P(\text{class})$.  
+- Repeat this process for all classes.  
+- Essentially, apply Bayes’ Theorem to all training data points for each class.  
 
-<h3>Fitting:</h3>
-<ul>
-    <li>Calculate local PMF values for each <strong>a<sub>i</sub></strong> in <strong>A</strong> (so you don’t have to do it again later) by finding <strong>P(class | value of a<sub>i</sub> feature<sub>1</sub> ∧ value of a<sub>i</sub> feature<sub>2</sub> ∧ …)</strong> using Bayes’ Theorem.</li>
-    <li>AKA: Get the probability of <strong>a<sub>i</sub></strong>’s value in <strong>f<sub>j</sub></strong>, denoted <strong>p<sub>ij</sub></strong></li>
-    <li>Find <strong>i,j = 0…i, j = n, m…p<sub>ij</sub></strong></li>
-    <li>Multiply by <strong>P(class)</strong></li>
-    <li>Repeat this process for all classes</li>
-    <li>Basically apply Bayes’ Theorem to all the training data points for each class</li>
-</ul>
+### Use KNN with $k$ nearest neighbors in each dimension  
+This ensures a standard "resolution" of the algorithm in every dimension but provides:  
+- A maximum of $k \times m$ neighbors to consider for estimating the value of $x$.  
+- A minimum of $k$ neighbors for consideration.  
 
-<h3>Use KNN with k nearest neighbors in each dimension:</h3>
-<p>This ensures a standard "resolution" of the algorithm in every dimension but gives a maximum of <strong>k * m</strong> neighbors to consider for estimating the value of <strong>x</strong> and a minimum of <strong>k</strong> neighbors for consideration</p>
+### Compute Weighted Average of All Neighbors' Likelihoods  
 
-<h3>Get weighted average of all neighbors' likelihoods</h3>
-
-
-<br>
-<br>
-
-<h2>For the future</h2>
-<ul>
-    <li>Recursively perform this process on the lth neighbors-of-neighbors of the original, unknown seed datapoint</li>
-    <li>Calculate the weighted mean of the probabilities using inverse-distance kernel weighting</li>
-    <li>Also, maybe add additional weighting based on variability in class attributable to each feature</li>
-</ul>
+## For the Future  
+- Recursively perform this process on the $l$th neighbors-of-neighbors of the original, unknown seed datapoint.  
+- Calculate the weighted mean of the probabilities using inverse-distance kernel weighting.  
+- Consider additional weighting based on variability in class attributable to each feature.  
